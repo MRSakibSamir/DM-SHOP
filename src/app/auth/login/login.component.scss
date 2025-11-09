@@ -1,0 +1,38 @@
+body {
+  background: linear-gradient(135deg, #007bff, #6610f2);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  background: #ffffff;
+  border: none;
+}
+
+h4 {
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  border: none;
+  transition: all 0.2s ease;
+  padding: 4px 0; /* smaller button height */
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0056b3, #520dc2);
+}
+/* Adjust 56px if your navbar is taller */
+.auth-wrapper {
+  min-height: calc(100vh - 56px);
+  padding: 2rem 1rem;
+}
+
+/* If you haven't added this yet for fixed-top nav */
+body { padding-top: 56px; }
+.auth-card {
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.1);
+  padding: 2rem;
+}

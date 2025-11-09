@@ -1,0 +1,88 @@
+<div class="container py-5">
+  <div class="mx-auto" style="max-width:520px">
+    <h3 class="mb-4 text-center">Create Account</h3>
+
+    <!-- Registration Form -->
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm.value)">
+      <div class="row g-3">
+        <!-- First Name -->
+        <div class="col-md-6">
+          <label class="form-label">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="firstName"
+            ngModel
+            placeholder="Rasel"
+            required
+          />
+        </div>
+
+        <!-- Last Name -->
+        <div class="col-md-6">
+          <label class="form-label">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lastName"
+            ngModel
+            placeholder="Ahmed"
+            required
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="col-12">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            ngModel
+            placeholder="you@example.com"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="col-12">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            ngModel
+            placeholder="Min 8 characters"
+            minlength="8"
+            required
+          />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="col-12">
+          <label class="form-label">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="confirmPassword"
+            ngModel
+            placeholder="Re-enter password"
+            required
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-12 d-grid mt-3">
+          <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">
+            Sign Up
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Login Link -->
+    <div class="text-center mt-3">
+      <a routerLink="/login">Already have an account? Login</a>
+    </div>
+  </div>
+</div>

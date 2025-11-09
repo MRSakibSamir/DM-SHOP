@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+/* Header row */
+h4 {
+  font-weight: 700;
+}
+
+/* Carded table wrapper */
+.table-responsive {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  overflow: hidden; /* keep rounded corners for the header */
+}
+
+/* Table basics */
+.table {
+  margin: 0;
+}
+.table thead th {
+  background: #f1f5f9;   /* light slate */
+  color: #0f172a;
+  font-weight: 700;
+  position: sticky;       /* nice sticky header when horizontally scrolling */
+  top: 0;
+  z-index: 1;
+}
+.table td,
+.table th {
+  padding: .65rem .75rem;
+}
+.table tbody tr {
+  transition: background .15s ease, transform .05s ease;
+}
+.table tbody tr:hover {
+  background: #f8fafc;   /* subtle hover */
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+}
+.btn-outline-secondary,
+.btn-outline-danger {
+  border-width: 1px;
+}
+.text-end .btn + .btn {
+  margin-left: .35rem;    /* spacing between action buttons */
+}
+
+/* Optional: nicer scrollbar on desktop for wide tables */
+.table-responsive::-webkit-scrollbar { height: 10px; }
+.table-responsive::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.15);
+  border-radius: 999px;
+}
+
+/* (Optional) Role pill styles:
+   If you change the Role cell to:
+   <td><span class="role user">User</span></td>
+   <td><span class="role admin">Admin</span></td>
+   You can use the styles below for colored pills.
+*/
+.role {
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .75rem;
+}
+.role.user  { background: #dcfce7; color: #065f46; }  /* green */
+.role.admin { background: #e0e7ff; color: #3730a3; }  /* indigo */

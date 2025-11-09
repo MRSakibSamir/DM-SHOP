@@ -1,0 +1,72 @@
+<!-- Full-height wrapper centered both ways -->
+<div class="min-vh-100 d-flex justify-content-center align-items-center py-5">
+  <div class="card shadow-lg p-4 rounded-4" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4">Login</h2>
+
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)" novalidate>
+      <!-- Email -->
+      <div class="mb-4">
+        <label for="email" class="form-label fw-semibold">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          ngModel
+          #email="ngModel"
+          required
+          email
+        />
+        <div
+          class="text-danger small mt-1"
+          *ngIf="email.invalid && (email.dirty || email.touched)"
+        >
+          <div *ngIf="email.errors?.['required']">Email is required.</div>
+          <div *ngIf="email.errors?.['email']">Enter a valid email.</div>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label fw-semibold">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          ngModel
+          #password="ngModel"
+          required
+          minlength="6"
+        />
+        <div
+          class="text-danger small mt-1"
+          *ngIf="password.invalid && (password.dirty || password.touched)"
+        >
+          <div *ngIf="password.errors?.['required']">Password is required.</div>
+          <div *ngIf="password.errors?.['minlength']">
+            Password must be at least 6 characters.
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn btn-primary w-100 rounded-pill"
+        [disabled]="!loginForm.form.valid"
+      >
+        Login
+      </button>
+    </form>
+
+    <!-- Extra links -->
+    <div class="text-center mt-3">
+      <a routerLink="/forgot-password" class="text-decoration-none small">Forgot password?</a>
+      <p class="mb-0">
+        Don't have an account?
+        <a routerLink="/register">Register</a>
+      </p>
+    </div>
+  </div>
+</div>

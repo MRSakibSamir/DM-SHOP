@@ -1,0 +1,167 @@
+<!-- Purchase Form -->
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Create Purchase</h3>
+    <a routerLink="/purchases" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> Back to Purchases
+    </a>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="card shadow-sm rounded-4">
+      <div class="card-body">
+        <!-- Purchase Info -->
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">PO Number</label>
+            <input type="text" class="form-control form-control-sm" formControlName="poNumber" placeholder="Enter PO number">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Purchase Date</label>
+            <input type="date" class="form-control form-control-sm" formControlName="date">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Expected Delivery</label>
+            <input type="date" class="form-control form-control-sm" formControlName="expectedDate">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Supplier</label>
+            <select class="form-select form-select-sm" formControlName="supplierId">
+              <option value="">Select supplier</option>
+              <option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                {{ supplier.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <select class="form-select form-select-sm" formControlName="status">
+              <option value="Pending">Pending</option>
+              <option value="Received">Received</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <textarea rows="2" class="form-control form-control-sm" formControlName="notes" placeholder="Additional notes..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Section -->
+    <div class="card shadow-sm rounded-4 mt-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0"><i class="bi bi-basket me-2"></i>Purchase Items</h5>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">
+            <i class="bi bi-plus-circle"></i> Add Item
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 40%">Product</th>
+                <th style="width: 20%">Cost (৳)</th>
+                <th style="width: 20%">Qty</th>
+                <th class="text-end" style="width: 20%">Line Total (৳)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody formArrayName="items">
+              <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <select class="form-select form-select-sm" formControlName="productId">
+                    <option value="">Select product</option>
+                    <option *ngFor="let product of products" [value]="product.id">
+                      {{ product.name }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" class="form-control form-control-sm text-end" formControlName="cost" min="0">
+                </td>
+                <td>
+                  <input type="number" class="form-control form-control-sm text-end" formControlName="qty" min="1">
+                </td>
+                <td class="text-end">
+                  ৳ {{ item.value.cost * item.value.qty | number:'1.2-2' }}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="row g-3 mt-4">
+      <div class="col-lg-7">
+        <div class="alert alert-info">
+          <i class="bi bi-receipt-cutoff me-2"></i>
+          <strong>Subtotal:</strong> ৳ {{ subtotal | number:'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card border-0 bg-light shadow-sm rounded-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Shipping</span>
+              <input type="number" formControlName="shipping"
+                     class="form-control form-control-sm text-end" style="width: 120px" min="0">
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Discount</span>
+              <input type="number" formControlName="discount"
+                     class="form-control form-control-sm text-end" style="width: 120px" min="0">
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Tax Rate</span>
+              <div class="d-flex align-items-center">
+                <input type="number" formControlName="taxRate"
+                       class="form-control form-control-sm text-end" style="width: 80px" min="0">
+                <span class="ms-1">%</span>
+              </div>
+            </div>
+
+            <hr>
+            <div class="d-flex justify-content-between">
+              <span>Tax Amount</span>
+              <strong>৳ {{ taxAmount | number:'1.2-2' }}</strong>
+            </div>
+            <div class="d-flex justify-content-between fs-5 mt-2">
+              <span>Grand Total</span>
+              <span class="fw-bold text-success">৳ {{ grandTotal | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button type="reset" class="btn btn-outline-secondary btn-sm" (click)="resetForm()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm"
+                  [disabled]="form.invalid || subtotal <= 0">
+            <i class="bi bi-save me-1"></i> Save Purchase
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

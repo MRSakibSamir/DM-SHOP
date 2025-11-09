@@ -1,0 +1,193 @@
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Purchase Entry</h3>
+    <span class="badge bg-dark">Status: {{ form.get('status')?.value }}</span>
+    <a routerLink="/purchases" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> Back to Purchases
+    </a>
+  </div>
+
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Top Row -->
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-3">
+            <label class="form-label fw-semibold">PO Number</label>
+            <input type="text" class="form-control" formControlName="poNumber">
+          </div>
+
+          <div class="col-6 col-md-3">
+            <label class="form-label fw-semibold">Date</label>
+            <input type="date" class="form-control" formControlName="date">
+          </div>
+
+          <div class="col-6 col-md-3">
+            <label class="form-label fw-semibold">Expected Date</label>
+            <input type="date" class="form-control" formControlName="expectedDate">
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label class="form-label fw-semibold">Status</label>
+            <select class="form-select" formControlName="status">
+              <option>Pending</option>
+              <option>Received</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
+
+          <!-- ✅ Supplier dropdown (Updated) -->
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold">Supplier</label>
+
+            <select class="form-select" formControlName="supplierId">
+              <option [ngValue]="null">-- Select Supplier --</option>
+              <option *ngFor="let s of suppliers" [ngValue]="s.id">{{ s.name }}</option>
+            </select>
+
+            <!-- New supplier button below dropdown -->
+            <div class="mt-2 d-flex justify-content-between align-items-center">
+              <div class="form-text" *ngIf="!suppliers?.length">
+                No suppliers yet — click <b>New</b> to add.
+              </div>
+              <button type="button"
+                      class="btn btn-sm btn-outline-primary ms-auto"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addSupplierModal">
+                <i class="bi bi-plus-lg"></i> New
+              </button>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold">Notes</label>
+            <input class="form-control" formControlName="notes" placeholder="Optional notes">
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width:40%">Product</th>
+                <th style="width:20%">Cost (৳)</th>
+                <th style="width:20%">Qty</th>
+                <th class="text-end" style="width:16%">Line Total (৳)</th>
+                <th class="text-end" style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody formArrayName="items">
+              <tr *ngFor="let row of items.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <select class="form-select" formControlName="productId" (change)="onProductChange(i)">
+                    <option [ngValue]="null">-- Select --</option>
+                    <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }}</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" step="0.01" min="0" class="form-control" formControlName="cost">
+                </td>
+                <td>
+                  <input type="number" step="1" min="1" class="form-control" formControlName="qty">
+                </td>
+                <td class="text-end fw-semibold">৳ {{ lineTotal(i) | number:'1.2-2' }}</td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-outline-danger btn-sm"
+                          (click)="removeItem(i)" [disabled]="items.length === 1">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex gap-2 mb-3">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">
+            <i class="bi bi-plus-lg"></i> Add Item
+          </button>
+        </div>
+
+        <!-- Summary -->
+        <div class="row g-3">
+          <div class="col-12 col-lg-7">
+            <div class="alert alert-info">
+              Subtotal: <strong>৳ {{ subtotal | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-5">
+            <div class="card border-0 bg-light">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>Shipping</span>
+                  <input type="number" class="form-control form-control-sm text-end"
+                         style="width: 120px" min="0" formControlName="shipping">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <span>Discount</span>
+                  <input type="number" class="form-control form-control-sm text-end"
+                         style="width: 120px" min="0" formControlName="discount">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <div>Tax Rate</div>
+                  <div class="d-flex align-items-center">
+                    <input type="number" class="form-control form-control-sm text-end"
+                           style="width: 80px" min="0" formControlName="taxRate">
+                    <span class="ms-1">%</span>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-2">
+                  <span>Tax Amount</span>
+                  <strong>৳ {{ taxAmount | number:'1.2-2' }}</strong>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-between fs-5">
+                  <span>Grand Total</span>
+                  <span class="fw-bold">৳ {{ grandTotal | number:'1.2-2' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button type="reset" class="btn btn-outline-secondary">Reset</button>
+              <button type="submit" class="btn btn-primary"
+                      [disabled]="form.invalid || subtotal <= 0">
+                Save Purchase
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Supplier Modal -->
+<div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSupplierModalLabel">Add Supplier</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Supplier Name</label>
+        <input #newSupplierName type="text" class="form-control" placeholder="e.g. Acme Traders" />
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                (click)="addSupplier(newSupplierName.value); newSupplierName.value=''">
+          Save Supplier
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

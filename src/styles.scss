@@ -1,0 +1,8 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+main {
+  flex-grow: 1; /* ensures footer stays at bottom if content is short */
+}

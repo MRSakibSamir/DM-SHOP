@@ -1,0 +1,374 @@
+<div class="content">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="mb-1">Admin Dashboard</h2>
+        <p class="text-muted mb-0">Welcome to your super shop management system</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button 
+          class="btn btn-outline-primary" 
+          (click)="refreshDashboard()"
+          [disabled]="isLoading">
+          <i class="bi bi-arrow-clockwise me-1"></i>
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </button>
+        <a routerLink="/dashboard/user" class="btn btn-primary">
+          <i class="bi bi-person me-1"></i>
+          User Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="isError" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error!</strong> {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="isError = false"></button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted">Loading dashboard data...</p>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div *ngIf="!isLoading">
+      <!-- Stat cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Total Products</h6>
+                  <h2 class="mb-0">{{ stats.totalProducts | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-box-seam"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">All available products</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Sales Today</h6>
+                  <h2 class="mb-0">${{ stats.salesToday | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-currency-dollar"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">Revenue from today's sales</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Low Stock</h6>
+                  <h2 class="mb-0">{{ stats.lowStockCount | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-exclamation-triangle"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">Items needing restock</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-danger text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Pending Orders</h6>
+                  <h2 class="mb-0">{{ stats.pendingOrders | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-cart-check"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">Orders awaiting processing</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Stats Row -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Total Revenue</h6>
+                  <h2 class="mb-0">${{ stats.totalRevenue | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-graph-up"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">Total revenue this month</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-secondary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">New Customers</h6>
+                  <h2 class="mb-0">{{ stats.newCustomers | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-people"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">New customers this month</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-dark text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Total Orders</h6>
+                  <h2 class="mb-0">{{ stats.totalOrders | number }}</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-cart"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">All time orders</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-purple text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="card-title">Satisfaction</h6>
+                  <h2 class="mb-0">{{ stats.customerSatisfaction }}%</h2>
+                </div>
+                <div class="stat-icon">
+                  <i class="bi bi-emoji-smile"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="opacity-75">Customer satisfaction rate</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row g-4 mb-4">
+        <!-- Sales Chart -->
+        <div class="col-12 col-lg-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Sales Overview</h5>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary active">Week</button>
+                <button class="btn btn-sm btn-outline-secondary">Month</button>
+                <button class="btn btn-sm btn-outline-secondary">Year</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas baseChart
+                  [data]="salesChartData"
+                  [options]="chartOptions"
+                  [type]="'line'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Chart -->
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Inventory Status</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas baseChart
+                  [data]="inventoryChartData"
+                  [options]="chartOptions"
+                  [type]="'doughnut'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Chart -->
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Monthly Revenue</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas baseChart
+                  [data]="revenueChartData"
+                  [options]="chartOptions"
+                  [type]="'bar'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tables Section -->
+      <div class="row g-4">
+        <!-- Recent Activities -->
+        <div class="col-12 col-lg-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Recent Activities</h5>
+              <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="list-group list-group-flush">
+                <div *ngFor="let activity of recentActivities" 
+                     class="list-group-item list-group-item-action">
+                  <div class="d-flex align-items-center">
+                    <div class="activity-icon me-3">
+                      <i [class]="'bi ' + activity.icon + ' text-' + activity.color"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">{{ activity.title }}</h6>
+                      <p class="mb-1 text-muted">{{ activity.description }}</p>
+                      <small class="text-muted">{{ activity.time }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="col-12 col-lg-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Top Selling Products</h5>
+              <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Product</th>
+                      <th>Sales</th>
+                      <th>Revenue</th>
+                      <th>Stock</th>
+                      <th>Trend</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of topProducts">
+                      <td>
+                        <strong>{{ product.name }}</strong>
+                      </td>
+                      <td>{{ product.sales }}</td>
+                      <td>${{ product.revenue | number }}</td>
+                      <td>
+                        <span [class]="getStockBadgeClass(product.stock, 10)">
+                          {{ getStockStatus(product.stock, 10) }}
+                        </span>
+                      </td>
+                      <td>
+                        <i [class]="getTrendIcon(product.trend)"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <a routerLink="/products" class="btn btn-outline-primary">
+                  <i class="bi bi-box me-1"></i>
+                  Manage Products
+                </a>
+                <a routerLink="/orders" class="btn btn-outline-success">
+                  <i class="bi bi-cart me-1"></i>
+                  View Orders
+                </a>
+                <a routerLink="/inventory" class="btn btn-outline-warning">
+                  <i class="bi bi-clipboard-check me-1"></i>
+                  Check Inventory
+                </a>
+                <a routerLink="/reports" class="btn btn-outline-info">
+                  <i class="bi bi-graph-up me-1"></i>
+                  View Reports
+                </a>
+                <a routerLink="/customers" class="btn btn-outline-secondary">
+                  <i class="bi bi-people me-1"></i>
+                  Manage Customers
+                </a>
+                <a routerLink="/settings" class="btn btn-outline-dark">
+                  <i class="bi bi-gear me-1"></i>
+                  Settings
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

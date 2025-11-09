@@ -1,0 +1,121 @@
+<div class="container mt-4">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white text-center fs-4 fw-bold">
+      🛒 Dhaka Mart Inventory
+    </div>
+    <div class="card-body p-4">
+
+      <!-- Add Product Form -->
+      <div class="row g-3 align-items-end mb-4">
+        <!-- Product Name Dropdown -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Name</label>
+          <select class="form-select" [(ngModel)]="newProduct.name">
+            <option value="" disabled selected>Select product</option>
+            <option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</option>
+          </select>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Category</label>
+          <select class="form-select" [(ngModel)]="newProduct.category">
+            <option value="" disabled selected>Select category</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+
+        <!-- Price Input -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Price ($)</label>
+          <input type="number" class="form-control" placeholder="0.00" [(ngModel)]="newProduct.price">
+        </div>
+
+        <!-- Stock Input -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Stock</label>
+          <input type="number" class="form-control" placeholder="0" [(ngModel)]="newProduct.stock">
+        </div>
+
+        <!-- Add Button -->
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-primary fw-semibold shadow-sm" (click)="create()">➕ Add Product</button>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle shadow-sm">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th class="text-end">Price ($)</th>
+              <th class="text-end">Stock</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products; let i = index">
+              <td>{{ i + 1 }}</td>
+
+              <!-- Product Name -->
+              <td>
+                <span *ngIf="!product.editing">{{ product.name }}</span>
+                <select *ngIf="product.editing" [(ngModel)]="product.name" class="form-select form-select-sm">
+                  <option value="" disabled>Select product</option>
+                  <option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</option>
+                </select>
+              </td>
+
+              <!-- Category -->
+              <td>
+                <span *ngIf="!product.editing">{{ product.category }}</span>
+                <select *ngIf="product.editing" [(ngModel)]="product.category" class="form-select form-select-sm">
+                  <option value="" disabled>Select category</option>
+                  <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                </select>
+              </td>
+
+              <!-- Price -->
+              <td class="text-end">
+                <span *ngIf="!product.editing">{{ product.price | currency }}</span>
+                <input *ngIf="product.editing" type="number" [(ngModel)]="product.price" class="form-control form-control-sm">
+              </td>
+
+              <!-- Stock -->
+              <td class="text-end">
+                <span *ngIf="!product.editing">{{ product.stock }}</span>
+                <input *ngIf="product.editing" type="number" [(ngModel)]="product.stock" class="form-control form-control-sm">
+              </td>
+
+              <!-- Actions -->
+              <td class="text-center">
+                <!-- Normal Mode -->
+                <div *ngIf="!product.editing">
+                  <button class="btn btn-info btn-sm me-1 shadow-sm" (click)="view(product)">👁 View</button>
+                  <button class="btn btn-warning btn-sm me-1 shadow-sm" (click)="edit(product)">✏ Edit</button>
+                  <button class="btn btn-danger btn-sm shadow-sm" (click)="delete(product)">🗑 Delete</button>
+                </div>
+                <!-- Edit Mode -->
+                <div *ngIf="product.editing">
+                  <button class="btn btn-success btn-sm me-1 shadow-sm" (click)="save(product)">💾 Save</button>
+                  <button class="btn btn-secondary btn-sm shadow-sm" (click)="cancel(product)">❌ Cancel</button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- No Products Message -->
+            <tr *ngIf="products.length === 0">
+              <td colspan="6" class="text-center text-muted py-3">
+                🚫 No products available. Add some items above!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+.sales-form { display: grid; gap: 1rem; }
+.grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: .75rem; }
+.block { display: grid; gap: .25rem; }
+.items { border: 1px solid #e5e7eb; border-radius: .5rem; padding: .75rem; }
+.items__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+.items__table { display: grid; gap: .5rem; }
+.items__row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: .5rem; align-items: center; }
+.summary { margin-left: auto; width: min(420px, 100%); border: 1px solid #e5e7eb; border-radius: .5rem; padding: .75rem; display: grid; gap: .5rem; }
+.summary .row { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+.summary .total { font-size: 1.125rem; }
+.actions { display: flex; gap: .5rem; justify-content: flex-end; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+input, select, textarea, button { font: inherit; }
+button { cursor: pointer; }

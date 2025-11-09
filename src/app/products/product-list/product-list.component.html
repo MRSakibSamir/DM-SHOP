@@ -1,0 +1,27 @@
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Products</h2>
+    <button routerLink="/products/add" class="btn btn-success">Add Product</button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let p of products">
+      <div class="card h-100 shadow-sm">
+        <div *ngIf="p.images && p.images.length" class="product-images">
+          <img [src]="p.images[0]" class="card-img-top" alt="{{p.name}}">
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{p.name}}</h5>
+          <p class="card-text text-truncate">{{p.description}}</p>
+          <p class="mb-1"><strong>Category:</strong> {{p.categoryName}}</p>
+          <p class="mb-1"><strong>Price:</strong> ${{p.price}}</p>
+          <p class="mb-2"><strong>Quantity:</strong> {{p.quantity}}</p>
+          <div class="mt-auto d-flex justify-content-between">
+            <button [routerLink]="['/products/edit', p.id]" class="btn btn-warning btn-sm">Edit</button>
+            <button (click)="deleteProduct(p.id!)" class="btn btn-danger btn-sm">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

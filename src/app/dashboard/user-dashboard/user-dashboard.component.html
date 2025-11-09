@@ -1,0 +1,318 @@
+<div class="content">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="mb-1">User Dashboard</h2>
+        <p class="text-muted mb-0">Welcome back! Track your orders, spend and rewards.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-primary" (click)="refresh()" [disabled]="isLoading">
+          <i class="bi bi-arrow-clockwise me-1"></i>
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </button>
+        <a routerLink="/dashboard/admin" class="btn btn-primary">
+          <i class="bi bi-speedometer2 me-1"></i>
+          Admin Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="isError" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error!</strong> {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="isError = false"></button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted">Loading your dashboard...</p>
+    </div>
+
+    <!-- Main -->
+    <div *ngIf="!isLoading">
+      <!-- Stat cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-primary text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Wallet Balance</h6>
+                <h2 class="mb-0">৳{{ stats.walletBalance | number }}</h2>
+                <small class="opacity-75">Use at checkout</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-success text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Loyalty Points</h6>
+                <h2 class="mb-0">{{ stats.loyaltyPoints | number }}</h2>
+                <small class="opacity-75">Redeem for coupons</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-stars"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-warning text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Orders this month</h6>
+                <h2 class="mb-0">{{ stats.ordersThisMonth | number }}</h2>
+                <small class="opacity-75">Keep it going</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-bag-check"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-info text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Pending Deliveries</h6>
+                <h2 class="mb-0">{{ stats.pendingDeliveries | number }}</h2>
+                <small class="opacity-75">On the way</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-truck"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second row -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-secondary text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Saved Items</h6>
+                <h2 class="mb-0">{{ stats.savedItems | number }}</h2>
+                <small class="opacity-75">In your wishlist</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-heart"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card stat-card bg-dark text-white">
+            <div class="card-body d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">Coupons</h6>
+                <h2 class="mb-0">{{ stats.coupons | number }}</h2>
+                <small class="opacity-75">Available for you</small>
+              </div>
+              <div class="stat-icon"><i class="bi bi-ticket-perforated"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-6">
+          <div class="card bg-light h-100">
+            <div class="card-body">
+              <h6 class="card-title mb-1">Last Login</h6>
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-clock text-primary"></i>
+                <span class="text-muted">{{ stats.lastLoginAt }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Orders (This Week)</h5>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary active">Week</button>
+                <button class="btn btn-sm btn-outline-secondary">Month</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas baseChart
+                        [data]="ordersChartData"
+                        [options]="chartOptions"
+                        [type]="'line'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Monthly Spend</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas baseChart
+                        [data]="spendChartData"
+                        [options]="chartOptions"
+                        [type]="'bar'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tables -->
+      <div class="row g-4">
+        <!-- Recent Orders -->
+        <div class="col-12 col-lg-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Recent Orders</h5>
+              <a routerLink="/orders" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let o of recentOrders">
+                      <td><strong>{{ o.id }}</strong></td>
+                      <td>{{ o.date }}</td>
+                      <td>৳{{ o.total | number }}</td>
+                      <td><span [class]="statusBadge(o.status)">{{ o.status }}</span></td>
+                    </tr>
+                    <tr *ngIf="recentOrders.length === 0">
+                      <td colspan="4" class="text-center text-muted py-3">No orders yet.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Tickets & Recommendations -->
+        <div class="col-12 col-lg-6">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Support Tickets</h5>
+              <a routerLink="/support" class="btn btn-sm btn-outline-primary">New Ticket</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="list-group list-group-flush">
+                <div *ngFor="let t of tickets" class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="mb-1">{{ t.subject }}</h6>
+                      <small class="text-muted">#{{ t.id }} • {{ t.createdAt }}</small>
+                    </div>
+                    <span class="badge"
+                          [ngClass]="{
+                            'bg-success': t.status === 'Resolved',
+                            'bg-warning': t.status === 'Pending',
+                            'bg-info': t.status === 'Open'
+                          }">{{ t.status }}</span>
+                  </div>
+                </div>
+                <div *ngIf="tickets.length === 0" class="list-group-item text-muted">
+                  No tickets.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Recommended For You</h5>
+              <a routerLink="/products" class="btn btn-sm btn-outline-primary">Browse</a>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-12 col-md-6" *ngFor="let p of recommendations">
+                  <div class="border rounded p-3 h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <strong>{{ p.name }}</strong>
+                      <span *ngIf="p.badge" class="badge"
+                            [ngClass]="{
+                              'bg-danger': p.badge === 'Hot',
+                              'bg-success': p.badge === 'New',
+                              'bg-warning': p.badge === 'Sale'
+                            }">{{ p.badge }}</span>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <span class="text-primary fw-semibold">৳{{ p.price | number }}</span>
+                      <button class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-cart-plus me-1"></i>Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="recommendations.length === 0" class="col-12 text-muted">
+                  Nothing to show yet.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <a routerLink="/orders" class="btn btn-outline-primary">
+                  <i class="bi bi-bag me-1"></i>
+                  My Orders
+                </a>
+                <a routerLink="/wishlist" class="btn btn-outline-success">
+                  <i class="bi bi-heart me-1"></i>
+                  Wishlist
+                </a>
+                <a routerLink="/wallet" class="btn btn-outline-warning">
+                  <i class="bi bi-wallet me-1"></i>
+                  Wallet
+                </a>
+                <a routerLink="/coupons" class="btn btn-outline-info">
+                  <i class="bi bi-ticket-perforated me-1"></i>
+                  Coupons
+                </a>
+                <a routerLink="/profile" class="btn btn-outline-secondary">
+                  <i class="bi bi-person-circle me-1"></i>
+                  Profile
+                </a>
+                <a routerLink="/support" class="btn btn-outline-dark">
+                  <i class="bi bi-life-preserver me-1"></i>
+                  Support
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<!-- <p>sales-report works!</p> -->
+
+<div class="container mt-4" *ngIf="!loading && !error">
+  <div class="card shadow-sm rounded-3">
+    <div class="card-header bg-primary text-white text-center fs-4 fw-bold">
+      Sales Report
+    </div>
+    <div class="card-body">
+
+      <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Sale ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th class="text-end">Total ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of sales; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.date | date:'mediumDate' }}</td>
+            <td>{{ sale.customer?.name ?? 'N/A' }}</td>
+            <td class="text-end">{{ sale.total ?? 0 | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" class="text-end">Grand Total</th>
+            <th class="text-end">{{ totalSales | number:'1.2-2' }}</th>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<div class="container my-4" *ngIf="loading">Loading sales report...</div>
+<div class="container my-4 text-danger" *ngIf="error">{{ error }}</div>
