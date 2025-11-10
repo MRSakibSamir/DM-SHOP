@@ -1,0 +1,57 @@
+<div class="container mt-3">
+
+  <!-- Supplier List -->
+  <ul *ngIf="!loading && suppliers.length" class="list-group mb-3">
+    <li *ngFor="let s of suppliers" class="list-group-item d-flex justify-content-between align-items-start">
+      <div>
+        <strong>{{ s.name }}</strong>
+        <div class="small">{{ s.contactInfo }}</div>
+        <div class="small text-muted">{{ s.description }}</div>
+      </div>
+
+      <div class="btn-group">
+        <button (click)="startEdit(s)" class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button (click)="deleteSupplier(s.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+      </div>
+    </li>
+  </ul>
+
+  <div *ngIf="!loading && !suppliers.length" class="mt-2">No suppliers yet.</div>
+
+  <!-- Supplier Form -->
+  <div class="supplier-form mt-4">
+    <h3 *ngIf="!editing">Create Supplier</h3>
+    <h3 *ngIf="editing">Edit Supplier</h3>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="mb-2">
+        <label class="form-label">Name *</label>
+        <input class="form-control" formControlName="name" />
+        <div *ngIf="form.controls['name'].touched && form.controls['name'].invalid" class="text-danger small">
+          Name is required and must be shorter than 255 characters.
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Contact Info</label>
+        <input class="form-control" formControlName="contactInfo" />
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="3" formControlName="description"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Category ID (optional)</label>
+        <input type="number" class="form-control" formControlName="categoryId" />
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success">Save</button>
+        <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+</div>

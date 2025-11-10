@@ -38,6 +38,7 @@ import { ProductFormComponent } from './products/product-form/product-form.compo
 import { SalesFormComponent } from './sales/sales-form/sales-form.component';
 import { CategoryFormComponent } from './categories/category-form/category-form.component';
 import { PurchaseFormComponent } from './purchase/purchase-form/purchase-form.component';
+import { SupplierComponent } from './supplier/supplier.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -89,6 +90,11 @@ const routes: Routes = [
   { path: 'customers', component: CustomerListComponent },
   { path: 'customers/form', component: CustomerListComponent },
   { path: 'customers/form/:id', component: CustomerListComponent },
+
+  { path: 'Suppliers', component: SupplierComponent },
+  
+
+
 
 
   

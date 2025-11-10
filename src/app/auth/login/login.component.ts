@@ -17,13 +17,13 @@ export class LoginComponent {
   login(formData: any) {
 
     const demoEmail = "mrsakib788@gmail.com";
-    const demoPassword = "sakib1234";
+    const demoPassword = "123456";
 
-    if (formData.email === demoEmail && formData.password === demoPassword) {
+    // if (formData.email === demoEmail && formData.password === demoPassword) {
       alert("Login Successful!");
       this.router.navigate(['/admin-dashboard']);
-    } else {
-      alert("Invalid email or password. Please try again.");
+    // } else {
+    //   alert("Invalid email or password. Please try again.");
 
   // onSubmit() {
   //   if (this.loginData.email && this.loginData.password) {
@@ -32,7 +32,7 @@ export class LoginComponent {
   //   } else {
   //     console.error('Invalid login data');
   //   }
-   }
+  //  }
 
   }
 }

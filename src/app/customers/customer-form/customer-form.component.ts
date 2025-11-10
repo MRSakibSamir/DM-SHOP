@@ -12,9 +12,9 @@ interface Customer {
 @Component({
   selector: 'app-customer',
   templateUrl: './customer-form.component.html',
-  styleUrls: ['./customer-form.component.css']
+  styleUrls: ['./customer-form.component.scss']
 })
-export class CustomerComponent {
+export class CustomerFormComponent {
 
   // List of customers
   customers: Customer[] = [];

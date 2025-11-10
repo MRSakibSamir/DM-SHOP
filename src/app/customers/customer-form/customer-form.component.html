@@ -8,27 +8,37 @@
       <!-- Add New Customer Form -->
       <div class="row g-3 align-items-end mb-4">
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Full Name</label>
-          <input type="text" class="form-control" placeholder="Customer Name" [(ngModel)]="newCustomer.name" name="newCustomerName">
+          <label class="form-label fw-semibold">Full Name *</label>
+          <input type="text" class="form-control" placeholder="Customer Name" 
+                 [(ngModel)]="newCustomer.name" name="newCustomerName" required>
         </div>
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Email</label>
-          <input type="email" class="form-control" placeholder="Email" [(ngModel)]="newCustomer.email" name="newCustomerEmail">
+          <label class="form-label fw-semibold">Email *</label>
+          <input type="email" class="form-control" placeholder="Email" 
+                 [(ngModel)]="newCustomer.email" name="newCustomerEmail" required>
         </div>
         <div class="col-md-4">
           <label class="form-label fw-semibold">Phone</label>
-          <input type="text" class="form-control" placeholder="Phone Number" [(ngModel)]="newCustomer.phone" name="newCustomerPhone">
+          <input type="text" class="form-control" placeholder="Phone Number" 
+                 [(ngModel)]="newCustomer.phone" name="newCustomerPhone">
         </div>
         <div class="col-md-6 mt-2">
           <label class="form-label fw-semibold">Address</label>
-          <input type="text" class="form-control" placeholder="Address" [(ngModel)]="newCustomer.address" name="newCustomerAddress">
+          <input type="text" class="form-control" placeholder="Address" 
+                 [(ngModel)]="newCustomer.address" name="newCustomerAddress">
         </div>
         <div class="col-md-3 mt-2">
           <label class="form-label fw-semibold">City</label>
-          <input type="text" class="form-control" placeholder="City" [(ngModel)]="newCustomer.city" name="newCustomerCity">
+          <input type="text" class="form-control" placeholder="City" 
+                 [(ngModel)]="newCustomer.city" name="newCustomerCity">
         </div>
         <div class="col-md-3 mt-2 d-grid">
-          <button class="btn btn-info fw-semibold shadow-sm" (click)="create()">➕ Add Customer</button>
+          <button class="btn btn-info fw-semibold shadow-sm" (click)="create()">
+            ➕ Add Customer
+          </button>
+        </div>
+        <div class="col-12">
+          <small class="text-muted">* Required fields</small>
         </div>
       </div>
 
@@ -55,13 +65,19 @@
               <td>{{ c.address }}</td>
               <td>{{ c.city }}</td>
               <td class="text-center">
-                <button class="btn btn-warning btn-sm me-1 shadow-sm" (click)="edit(c)">✏ Edit</button>
-                <button class="btn btn-danger btn-sm shadow-sm" (click)="delete(c.id)">🗑 Delete</button>
+                <button class="btn btn-warning btn-sm me-1 shadow-sm" (click)="edit(c)">
+                  ✏ Edit
+                </button>
+                <button class="btn btn-danger btn-sm shadow-sm" (click)="delete(c.id)">
+                  🗑 Delete
+                </button>
               </td>
             </tr>
 
             <tr *ngIf="customers.length === 0">
-              <td colspan="7" class="text-center text-muted py-3">🚫 No customers available. Add one above!</td>
+              <td colspan="7" class="text-center text-muted py-3">
+                🚫 No customers available. Add one above!
+              </td>
             </tr>
           </tbody>
         </table>
@@ -80,24 +96,29 @@
   <div class="card-body">
     <div class="row g-3">
       <div class="col-md-6">
-        <label class="form-label fw-semibold">Full Name</label>
-        <input type="text" class="form-control" [(ngModel)]="editCustomer.name" placeholder="Enter customer name" (keyup.enter)="save()">
+        <label class="form-label fw-semibold">Full Name *</label>
+        <input type="text" class="form-control" [(ngModel)]="editCustomer.name" 
+               placeholder="Enter customer name" (keyup.enter)="save()" required>
       </div>
       <div class="col-md-6">
-        <label class="form-label fw-semibold">Email</label>
-        <input type="email" class="form-control" [(ngModel)]="editCustomer.email" placeholder="Enter email" (keyup.enter)="save()">
+        <label class="form-label fw-semibold">Email *</label>
+        <input type="email" class="form-control" [(ngModel)]="editCustomer.email" 
+               placeholder="Enter email" (keyup.enter)="save()" required>
       </div>
       <div class="col-md-6">
         <label class="form-label fw-semibold">Phone</label>
-        <input type="text" class="form-control" [(ngModel)]="editCustomer.phone" placeholder="Enter phone number" (keyup.enter)="save()">
+        <input type="text" class="form-control" [(ngModel)]="editCustomer.phone" 
+               placeholder="Enter phone number" (keyup.enter)="save()">
       </div>
       <div class="col-md-6">
         <label class="form-label fw-semibold">City</label>
-        <input type="text" class="form-control" [(ngModel)]="editCustomer.city" placeholder="Enter city" (keyup.enter)="save()">
+        <input type="text" class="form-control" [(ngModel)]="editCustomer.city" 
+               placeholder="Enter city" (keyup.enter)="save()">
       </div>
       <div class="col-12">
         <label class="form-label fw-semibold">Address</label>
-        <input type="text" class="form-control" [(ngModel)]="editCustomer.address" placeholder="Enter address" (keyup.enter)="save()">
+        <input type="text" class="form-control" [(ngModel)]="editCustomer.address" 
+               placeholder="Enter address" (keyup.enter)="save()">
       </div>
     </div>
 

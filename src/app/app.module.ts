@@ -16,6 +16,8 @@ import { CategoryListComponent } from './categories/category-list/category-list.
 
 import { CustomerListComponent } from './customers/customer-list/customer-list.component';
 
+ 
+
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserAddComponent } from './users/user-add/user-add.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
@@ -43,6 +45,8 @@ import { CategoryFormComponent } from './categories/category-form/category-form.
 import { PurchaseFormComponent } from './purchase/purchase-form/purchase-form.component';
 import { SalesFormComponent } from './sales/sales-form/sales-form.component';
 import { NgChartsModule } from 'ng2-charts';
+import { CustomerFormComponent } from './customers/customer-form/customer-form.component';
+import { SupplierComponent } from './supplier/supplier.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,7 @@ import { NgChartsModule } from 'ng2-charts';
     UserDashboardComponent,
     ProductListComponent,
     CategoryListComponent,
-    
+    CustomerFormComponent,
     CustomerListComponent,
     
     UserListComponent,
@@ -80,7 +84,8 @@ import { NgChartsModule } from 'ng2-charts';
     CategoryFormComponent,
     
     PurchaseFormComponent,
-    SalesFormComponent
+    SalesFormComponent,
+    SupplierComponent
     
   ],
   imports: [
