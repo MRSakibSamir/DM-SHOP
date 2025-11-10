@@ -45,7 +45,12 @@
                 </tr>
               </thead>
               <tbody formArrayName="items">
-                <tr *ngFor="let row of items.controls; let i = index" [formGroupName]="i">
+                <tr *ngFor="let row of items.controls; let i = index"
+                    [formGroupName]="i"
+                    [ngClass]="{
+                      'fade-out': removingRows.includes(i),
+                      'fade-in': newlyAddedRows.includes(i)
+                    }">
                   <td>
                     <select class="form-select" formControlName="productId" (change)="onProductChange(i)">
                       <option [ngValue]="null">-- Select --</option>
@@ -60,8 +65,7 @@
                   </td>
                   <td class="text-end fw-semibold">৳ {{ lineTotal(i) | number:'1.2-2' }}</td>
                   <td class="text-end">
-                    <button type="button" class="btn btn-outline-danger btn-sm"
-                            (click)="resetItem(i)">
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)">
                       <i class="bi bi-trash"></i>
                     </button>
                   </td>
@@ -70,11 +74,12 @@
             </table>
           </div>
 
-          <!-- Add Item Button -->
+          <!-- Add / Remove All Items Buttons -->
           <div class="d-flex gap-2 mb-3">
             <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">
               <i class="bi bi-plus-lg"></i> Add Item
             </button>
+          
           </div>
         </div>
 

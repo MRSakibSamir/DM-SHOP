@@ -14,7 +14,7 @@
         <div class="row g-3 mb-3">
           <div class="col-12 col-md-3">
             <label class="form-label fw-semibold">PO Number</label>
-            <input type="text" class="form-control" formControlName="poNumber">
+            <input type="text" class="form-control" formControlName="poNumber" readonly>
           </div>
 
           <div class="col-6 col-md-3">
@@ -36,16 +36,14 @@
             </select>
           </div>
 
-          <!-- ✅ Supplier dropdown (Updated) -->
+          <!-- Supplier dropdown -->
           <div class="col-12 col-md-6">
             <label class="form-label fw-semibold">Supplier</label>
-
             <select class="form-select" formControlName="supplierId">
               <option [ngValue]="null">-- Select Supplier --</option>
               <option *ngFor="let s of suppliers" [ngValue]="s.id">{{ s.name }}</option>
             </select>
 
-            <!-- New supplier button below dropdown -->
             <div class="mt-2 d-flex justify-content-between align-items-center">
               <div class="form-text" *ngIf="!suppliers?.length">
                 No suppliers yet — click <b>New</b> to add.
@@ -78,7 +76,12 @@
               </tr>
             </thead>
             <tbody formArrayName="items">
-              <tr *ngFor="let row of items.controls; let i = index" [formGroupName]="i">
+              <tr *ngFor="let row of items.controls; let i = index"
+                  [formGroupName]="i"
+                  [ngClass]="{
+                    'fade-out': removingRows.includes(i),
+                    'fade-in': addedRows.includes(i)
+                  }">
                 <td>
                   <select class="form-select" formControlName="productId" (change)="onProductChange(i)">
                     <option [ngValue]="null">-- Select --</option>
@@ -93,8 +96,7 @@
                 </td>
                 <td class="text-end fw-semibold">৳ {{ lineTotal(i) | number:'1.2-2' }}</td>
                 <td class="text-end">
-                  <button type="button" class="btn btn-outline-danger btn-sm"
-                          (click)="removeItem(i)" [disabled]="items.length === 1">
+                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>
@@ -106,6 +108,9 @@
         <div class="d-flex gap-2 mb-3">
           <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">
             <i class="bi bi-plus-lg"></i> Add Item
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeAllItems()" [disabled]="items.length === 0">
+            <i class="bi bi-x-circle"></i> 
           </button>
         </div>
 

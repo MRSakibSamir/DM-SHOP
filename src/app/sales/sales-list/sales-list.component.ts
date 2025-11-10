@@ -13,11 +13,12 @@ interface Product {
   styleUrls: ['./sales-list.component.scss']
 })
 export class SalesListComponent implements OnInit {
-
   form!: FormGroup;
+  removingRows: number[] = [];
+  newlyAddedRows: number[] = [];
 
   products: Product[] = [
-    { id: 1, name: 'Milk Vita Butter 100gm',  cost: 150 },
+    { id: 1, name: 'Milk Vita Butter 100gm', cost: 150 },
     { id: 2, name: 'Farm Fresh Milk Powder 1L', cost: 910 },
     { id: 3, name: 'ACI Pure Chinigura Rice 1kg', cost: 310 },
     { id: 4, name: 'Mojo 1L', cost: 60 },
@@ -36,11 +37,9 @@ export class SalesListComponent implements OnInit {
       taxRate: [5, [Validators.min(0)]],
       notes: ['']
     });
-
     this.addItem();
   }
 
-  // Helpers
   today(): string {
     return new Date().toISOString().slice(0, 10);
   }
@@ -52,12 +51,10 @@ export class SalesListComponent implements OnInit {
       .padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}-${d.getHours()}${d.getMinutes()}`;
   }
 
-  // FormArray getter
   get items(): FormArray {
     return this.form.get('items') as FormArray;
   }
 
-  // Create a single product row
   createItem(): FormGroup {
     return this.fb.group({
       productId: [null, Validators.required],
@@ -66,22 +63,29 @@ export class SalesListComponent implements OnInit {
     });
   }
 
-  // Add item at the end
   addItem(): void {
+    const index = this.items.length;
     this.items.push(this.createItem());
+    this.newlyAddedRows.push(index);
+    setTimeout(() => {
+      this.newlyAddedRows = this.newlyAddedRows.filter(i => i !== index);
+    }, 300);
   }
 
-  // Remove/Reset a row (reset product data)
-  resetItem(index: number): void {
-    const row = this.items.at(index) as FormGroup;
-    row.reset({
-      productId: null,
-      cost: 0,
-      qty: 1
-    });
+  removeItem(index: number): void {
+    this.removingRows.push(index);
+    setTimeout(() => {
+      this.items.removeAt(index);
+      this.removingRows = this.removingRows.filter(i => i !== index);
+    }, 300);
   }
 
-  // Update cost if product is selected
+  removeAllItems(): void {
+    if (confirm('Are you sure you want to remove all items?')) {
+      this.items.clear();
+    }
+  }
+
   onProductChange(index: number): void {
     const row = this.items.at(index) as FormGroup;
     const pid = row.get('productId')?.value;
@@ -91,7 +95,6 @@ export class SalesListComponent implements OnInit {
     }
   }
 
-  // Calculate line total
   lineTotal(index: number): number {
     const g = this.items.at(index) as FormGroup;
     const qty = Number(g.get('qty')?.value || 0);
@@ -99,7 +102,6 @@ export class SalesListComponent implements OnInit {
     return qty * cost;
   }
 
-  // Subtotal
   get subtotal(): number {
     return this.items.controls.reduce((sum, _, i) => sum + this.lineTotal(i), 0);
   }
@@ -122,7 +124,6 @@ export class SalesListComponent implements OnInit {
     return this.subtotal + this.shipping - this.discount + this.taxAmount;
   }
 
-  // Submit form
   onSubmit(): void {
     if (this.form.invalid || this.subtotal <= 0) {
       this.form.markAllAsTouched();
