@@ -69,10 +69,13 @@ const routes: Routes = [
   { path: 'users/view/:id', component: UserDetailComponent },
 
 
-
   { path: 'sales', component: SalesListComponent },
   { path: 'sales/form', component: SalesFormComponent },
   { path: 'sales/form/:id', component: SalesFormComponent },
+
+  { path: 'sales', component: SalesListComponent },
+  { path: 'sales/list', component: SalesListComponent },
+  { path: 'sales/list/:id', component: SalesListComponent },
 
 
   { path: 'category', component: CategoryListComponent },
@@ -84,6 +87,11 @@ const routes: Routes = [
   { path: 'purchase/form', component: PurchaseFormComponent },
   { path: 'purchase/form/:id', component: PurchaseFormComponent },
 
+  { path: 'purchase', component: PurchaseListComponent },
+  { path: 'purchase/list', component: PurchaseListComponent },
+  { path: 'purchase/list/:id', component: PurchaseListComponent },
+
+
 
 
   // Customers
@@ -91,10 +99,8 @@ const routes: Routes = [
   { path: 'customers/form', component: CustomerListComponent },
   { path: 'customers/form/:id', component: CustomerListComponent },
 
-  { path: 'Suppliers', component: SupplierComponent },
-  
-
-
+  // Suppliers
+  { path: 'supplier', component: SupplierComponent },
 
 
   

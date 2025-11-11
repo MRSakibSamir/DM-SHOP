@@ -27,6 +27,11 @@ export class SalesListComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  /** ✅ Initialize the form */
+  initializeForm(): void {
     this.form = this.fb.group({
       poNumber: [this.generatePoNumber(), Validators.required],
       date: [this.today(), Validators.required],
@@ -37,6 +42,7 @@ export class SalesListComponent implements OnInit {
       taxRate: [5, [Validators.min(0)]],
       notes: ['']
     });
+
     this.addItem();
   }
 
@@ -78,12 +84,6 @@ export class SalesListComponent implements OnInit {
       this.items.removeAt(index);
       this.removingRows = this.removingRows.filter(i => i !== index);
     }, 300);
-  }
-
-  removeAllItems(): void {
-    if (confirm('Are you sure you want to remove all items?')) {
-      this.items.clear();
-    }
   }
 
   onProductChange(index: number): void {
@@ -142,11 +142,19 @@ export class SalesListComponent implements OnInit {
     console.log('Sales SUBMIT:', payload);
     alert('Sales record saved! (check console for payload)');
 
+    this.resetForm();
+  }
+
+  /** ✅ Proper reset method */
+  resetForm(): void {
+    if (!confirm('Are you sure you want to reset the form?')) return;
+
+    this.items.clear();
+
     this.form.reset({
       poNumber: this.generatePoNumber(),
       date: this.today(),
       expectedDate: this.today(),
-      items: [],
       shipping: 0,
       discount: 0,
       taxRate: 5,
@@ -154,5 +162,8 @@ export class SalesListComponent implements OnInit {
     });
 
     this.addItem();
+
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 }

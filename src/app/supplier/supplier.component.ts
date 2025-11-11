@@ -34,11 +34,8 @@ export class SupplierComponent implements OnInit {
     this.loadSuppliers();
   }
 
-  // Simulate loading suppliers
   loadSuppliers(): void {
     this.loading = true;
-
-    // Replace with API call
     setTimeout(() => {
       this.suppliers = [
         { id: 1, name: 'Supplier One', contactInfo: 'contact1@example.com', description: 'First supplier', categoryId: 1 },
@@ -48,7 +45,6 @@ export class SupplierComponent implements OnInit {
     }, 500);
   }
 
-  // Start editing a supplier
   startEdit(supplier: Supplier): void {
     this.editing = true;
     this.editingSupplierId = supplier.id;
@@ -58,16 +54,15 @@ export class SupplierComponent implements OnInit {
       description: supplier.description,
       categoryId: supplier.categoryId
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Cancel editing/creating
   cancel(): void {
     this.editing = false;
     this.editingSupplierId = null;
     this.form.reset();
   }
 
-  // Save supplier (create or update)
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -77,33 +72,31 @@ export class SupplierComponent implements OnInit {
     const formValue = this.form.value;
 
     if (this.editing && this.editingSupplierId !== null) {
-      // Update existing supplier
       const index = this.suppliers.findIndex(s => s.id === this.editingSupplierId);
       if (index !== -1) {
         this.suppliers[index] = {
           id: this.editingSupplierId,
           ...formValue
         };
+        alert('✅ Supplier updated successfully!');
       }
     } else {
-      // Create new supplier
       const newSupplier: Supplier = {
         id: this.suppliers.length ? Math.max(...this.suppliers.map(s => s.id)) + 1 : 1,
         ...formValue
       };
       this.suppliers.push(newSupplier);
+      alert('✅ Supplier created successfully!');
     }
 
     this.cancel();
   }
 
-  // Delete supplier
   deleteSupplier(id: number): void {
-    if (confirm('Are you sure you want to delete this supplier?')) {
+    if (confirm('🗑️ Are you sure you want to delete this supplier?')) {
       this.suppliers = this.suppliers.filter(s => s.id !== id);
-      if (this.editingSupplierId === id) {
-        this.cancel();
-      }
+      if (this.editingSupplierId === id) this.cancel();
+      alert('🚮 Supplier deleted.');
     }
   }
 }

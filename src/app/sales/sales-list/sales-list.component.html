@@ -74,12 +74,11 @@
             </table>
           </div>
 
-          <!-- Add / Remove All Items Buttons -->
+          <!-- Add Item Button -->
           <div class="d-flex gap-2 mb-3">
             <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">
               <i class="bi bi-plus-lg"></i> Add Item
             </button>
-          
           </div>
         </div>
 
@@ -137,7 +136,7 @@
         <button type="submit" class="btn btn-success" [disabled]="form.invalid || subtotal <= 0">
           Save
         </button>
-        <button type="button" class="btn btn-outline-secondary" (click)="form.reset(form.value)">
+        <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">
           Reset
         </button>
       </div>

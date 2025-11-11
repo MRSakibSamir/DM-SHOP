@@ -8,6 +8,7 @@
 //   updatedAt?: Date;   // Optional: for tracking updates
 // }
 export interface Product {
+  stock: number;
   id?: number;
   name: string;
   description: string;
@@ -16,4 +17,5 @@ export interface Product {
   categoryId?: number;
   categoryName?: string;
   images?: string[];
+
 }
